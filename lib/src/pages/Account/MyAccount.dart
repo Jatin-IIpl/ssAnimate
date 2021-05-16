@@ -1,8 +1,10 @@
 import 'package:ECom/src/api/apiServices.dart';
+import 'package:ECom/src/elements/custom_route.dart';
 import 'package:ECom/src/helpers/SizeConfig.dart';
 import 'package:ECom/src/helpers/bottomNavBar.dart';
 import 'package:ECom/src/helpers/constants.dart';
 import 'package:ECom/src/models/userData.dart';
+import 'package:ECom/src/pages/Account/faq/faq.dart';
 import 'package:ECom/src/pages/Account/profile.dart';
 import 'package:ECom/src/pages/Account/support.dart';
 import 'package:ECom/src/pages/auth/loginAndRegister.dart';
@@ -88,8 +90,11 @@ class _MyAccountState extends State<MyAccount> {
                   ),
                   trailing: IconButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => Profile(
+                      Navigator.of(context).push(CustomRoute(
+                        from: 1,
+                          builder: (ontext, z, c) => 
+                          
+                          Profile(
                                 name: userData.currentUser.name,
                                 email: userData.currentUser.email,
                               )));

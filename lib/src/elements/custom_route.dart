@@ -79,8 +79,9 @@ class _AnimateBuildState extends State<AnimateBuild>
   void initState() {
     super.initState();
     controller = AnimationController(
-        duration: const Duration(milliseconds: 1050), vsync: this);
-    animation = CurvedAnimation(parent: controller, curve: Curves.slowMiddle);
+        duration: const Duration(milliseconds: 950), vsync: this);
+    animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
 
     /*animation.addStatusListener((status) {
     if (status == AnimationStatus.completed) {
@@ -96,30 +97,32 @@ class _AnimateBuildState extends State<AnimateBuild>
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: AnimatedBuilder(
-        animation: animation,
+      child:
+          // AnimatedBuilder(
+          //   animation: animation,
+          //   child: widget.child,
+          //   builder: (BuildContext context, Widget child) {
+          //     return
+          SlideTransition(
+        //for slide transition uncomment this (sliding)
+        position: Tween<Offset>(
+          begin: widget.from == 0
+              ? Offset(0, 2)
+              : (widget.from == 1 ? Offset(1, 0) : Offset(-1, 0)),
+
+          // const Offset(0, 2),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: Curves.slowMiddle,
+          ),
+          // animation
+        ),
+
         child: widget.child,
-        builder: (BuildContext context, Widget child) {
-          return SlideTransition(
-            //for slide transition uncomment this (sliding)
-            position: Tween<Offset>(
-              begin: widget.from == 0
-                  ? Offset(0, 2)
-                  : (widget.from == 1 ? Offset(1, 0) : Offset(-1, 0)),
-
-              // const Offset(0, 2),
-              end: Offset.zero,
-            ).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Curves.slowMiddle,
-              ),
-              // animation
-            ),
-
-            child: child,
-          );
-        },
+        // );
+        // },
       ),
     );
   }

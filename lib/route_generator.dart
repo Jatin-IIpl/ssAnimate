@@ -1,3 +1,4 @@
+import 'package:ECom/src/elements/custom_route.dart';
 import 'package:ECom/src/pages/Account/vendorResource.dart';
 import 'package:ECom/src/pages/auth/loginAndRegister.dart';
 import 'package:ECom/src/pages/auth/otp.dart';
@@ -41,6 +42,7 @@ import 'package:ECom/src/pages/Account/aboutUsWeb.dart';
 import 'package:ECom/src/pages/Account/cancellationPolicy.dart';
 import 'package:ECom/src/pages/Account/returnRefund.dart';
 import 'package:ECom/src/pages/Account/faq/faqScreen.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Getting arguments passed in while calling Navigator.pushNamed
@@ -51,7 +53,7 @@ class RouteGenerator {
       case '/Splash':
         return MaterialPageRoute(builder: (_) => SplashScreen());
       case '/Search':
-        return MaterialPageRoute(builder: (_) => SearchScreen());
+        return CustomRoute(from: 1, builder: (_, x, xx) => SearchScreen());
       // case '/MobileVerification':
       //   return MaterialPageRoute(builder: (_) => SignUpWidget());
       // case '/MobileVerification2':

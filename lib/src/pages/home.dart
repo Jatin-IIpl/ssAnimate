@@ -210,8 +210,9 @@ class _HomeWidgetState extends State<HomeWidget>
       }
     });
     controller = AnimationController(
-        duration: const Duration(milliseconds: 800), vsync: this);
-    // animation = CurvedAnimation(parent: controller, curve: Curves.bounceOut);
+        duration: const Duration(milliseconds: 3000), vsync: this);
+    animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
 
     /*animation.addStatusListener((status) {
     if (status == AnimationStatus.completed) {
@@ -546,280 +547,271 @@ class _HomeWidgetState extends State<HomeWidget>
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 950),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          final ani =
-              // Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
-              //     .animate(animation);
-              CurvedAnimation(parent: animation, curve: Curves.easeInOutCirc);
-          return FadeTransition(
-            opacity: ani,
-            child: child,
-          );
-        },
-        child: _isLoading
-            ? Scaffold(
+    return _isLoading
+        ? Scaffold(
+            key: UniqueKey(),
+            backgroundColor: Colors.white,
+            appBar: customAppBar(context),
+            body: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Shimmer.fromColors(
+                        baseColor: Colors.grey[400],
+                        highlightColor: Colors.white,
+                        child: CategoryListLoad()),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Center(
+                        child: Image.asset(
+                          "assets/img/loading.gif",
+                          height: 100,
+                          width: SizeConfig.w * 0.8,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    ),
+                    HomeLoadWidget()
+                  ]),
+            ),
+          )
+        : ScaleTransition(
+            scale: animation,
+            // axis: Axis.horizontal,
+            // axisAlignment: -2,
+            // opacity: ani,
+            // child:
+            child: Consumer<UserData>(builder: (context, userData, ch) {
+              return SafeArea(
                 key: UniqueKey(),
-                backgroundColor: Colors.white,
-                appBar: customAppBar(context),
-                body: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Shimmer.fromColors(
-                            baseColor: Colors.grey[400],
-                            highlightColor: Colors.white,
-                            child: CategoryListLoad()),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Center(
-                            child: Image.asset(
-                              "assets/img/loading.gif",
-                              height: 100,
-                              width: SizeConfig.w * 0.8,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
-                        HomeLoadWidget()
-                      ]),
-                ),
-              )
-            : Consumer<UserData>(builder: (context, userData, ch) {
-                return SafeArea(
-                  key: UniqueKey(),
-                  child: Scaffold(
-                    backgroundColor: Colors.white,
-                    appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(SizeConfig.h * 0.11),
-                      child: AppBar(
-                        flexibleSpace: Container(
-                          // margin: EdgeInsets.only(top: SizeConfig.h * 0.037),
-                          // padding: EdgeInsets.only(left: SizeConfig.w * 0.035),
-                          // decoration: BoxDecoration(
-                          //   border: Border(
-                          //     bottom: BorderSide(width: 1.0, color: Colors.grey[300]),
-                          //   ),
-                          // ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(left: SizeConfig.w * 0.045),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    // Text("shopsasta",
-                                    //     style: Theme.of(context)
-                                    //         .textTheme
-                                    //         .headline5
-                                    //         .copyWith(
-                                    //           fontWeight: FontWeight.w800,
-                                    //           fontFamily: "QuickSand",
-                                    //           fontSize: SizeConfig.w * 0.062,
-                                    //         )
-                                    //         .merge(
-                                    //           TextStyle(
-                                    //               letterSpacing: 1.3,
-                                    //               color: Theme.of(context)
-                                    //                   .primaryColor),
-                                    //         )),
-                                    Image.asset(
-                                      'assets/icons/SHOPSASTA_200X45.png',
-                                      width: SizeConfig.w * 0.29,
-                                    ),
-                                    Spacer(),
-                                    GestureDetector(
-                                        onTap: () {
-                                          // showSearch(context: context, delegate: ProductSearch());
-                                          Navigator.of(context)
-                                              .pushNamed('/Search');
-                                        },
-                                        child: searchIcon(context)),
-                                    new ShoppingCartButtonWidget(
-                                        iconColor:
-                                            Theme.of(context).primaryColorLight,
-                                        labelColor:
-                                            Theme.of(context).primaryColor),
-                                  ],
-                                ),
-                              ),
-                              CategoryList(
-                                isSub: false,
-                              ),
-                              Divider(
-                                  thickness: 1.2,
-                                  height: 1.2,
-                                  color: Colors.grey[300]),
-                            ],
-                          ),
-                        ),
-                        automaticallyImplyLeading: false,
-                        backgroundColor: Colors.white,
-                        elevation: 0,
-                      ),
-                    ),
-                    body: RefreshIndicator(
-                      onRefresh: () => getProductList(refresh: true),
-                      child: SingleChildScrollView(
+                child: Scaffold(
+                  backgroundColor: Colors.white,
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(SizeConfig.h * 0.11),
+                    child: AppBar(
+                      flexibleSpace: Container(
+                        // margin: EdgeInsets.only(top: SizeConfig.h * 0.037),
+                        // padding: EdgeInsets.only(left: SizeConfig.w * 0.035),
+                        // decoration: BoxDecoration(
+                        //   border: Border(
+                        //     bottom: BorderSide(width: 1.0, color: Colors.grey[300]),
+                        //   ),
+                        // ),
                         child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: HomeSliderWidget(slides: recItem),
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(left: SizeConfig.w * 0.045),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  // Text("shopsasta",
+                                  //     style: Theme.of(context)
+                                  //         .textTheme
+                                  //         .headline5
+                                  //         .copyWith(
+                                  //           fontWeight: FontWeight.w800,
+                                  //           fontFamily: "QuickSand",
+                                  //           fontSize: SizeConfig.w * 0.062,
+                                  //         )
+                                  //         .merge(
+                                  //           TextStyle(
+                                  //               letterSpacing: 1.3,
+                                  //               color: Theme.of(context)
+                                  //                   .primaryColor),
+                                  //         )),
+                                  Image.asset(
+                                    'assets/icons/SHOPSASTA_200X45.png',
+                                    width: SizeConfig.w * 0.29,
+                                  ),
+                                  Spacer(),
+                                  GestureDetector(
+                                      onTap: () {
+                                        // showSearch(context: context, delegate: ProductSearch());
+                                        Navigator.of(context)
+                                            .pushNamed('/Search');
+                                      },
+                                      child: searchIcon(context)),
+                                  new ShoppingCartButtonWidget(
+                                      iconColor:
+                                          Theme.of(context).primaryColorLight,
+                                      labelColor:
+                                          Theme.of(context).primaryColor),
+                                ],
                               ),
-                              Consumer<ProductListData>(
-                                  builder: (context, productListData, ch) {
-                                return !(productListData?.stockStatus ?? true)
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        width: SizeConfig.w,
-                                        height: 30.0,
-                                        color:
-                                            // Colors.redAccent,
-
-                                            Colors.white,
-                                        child: Center(
-                                            child: AutoSizeText(
-                                          "We are not delivering in your area yet",
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color:
-                                                  // Colors.white),
-
-                                                  Colors.redAccent),
-                                        )))
-                                    : Container();
-                              }),
-                              // All Groceries
-                              ListView.separated(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  separatorBuilder:
-                                      (context, sepearatedIndecx) {
-                                    return Container(height: 10);
-                                  },
-                                  itemCount: homeJson.length,
-                                  itemBuilder: (context, homeIndex) {
-                                    if (homeJson.values
-                                            .toList()[homeIndex]
-                                            .values
-                                            .toList()[0]
-                                            ?.isNotEmpty ??
-                                        true)
-                                      return Column(children: <Widget>[
-                                        HomeTitle(
-                                          viewAllPressed: () async {
-                                            // Provider.of<ProductListData>(context,
-                                            //         listen: false)
-                                            //     .setData(homeJson.values
-                                            //         .toList()[homeIndex]);
-                                            Map productRes = isLogin
-                                                ? await ApiServices
-                                                    .getRequestPincode(
-                                                        homeJsonUrl.values
-                                                                    .toList()[
-                                                                homeIndex] +
-                                                            "?json=1")
-                                                : await ApiServices.getRequest(
-                                                    homeJsonUrl.values.toList()[
-                                                            homeIndex] +
-                                                        "?json=1");
-                                            if (productRes != null) {
-                                              // stopLoading();
-                                              // Provider.of<ProductListData>(contexss
-                                              print(
-                                                  "befor view all the items are" +
-                                                      homeJsonUrl.values
-                                                          .toList()[homeIndex]);
-                                              print(productRes["items"]
-                                                  .toString());
-                                              Provider.of<ProductListData>(
-                                                      context,
-                                                      listen: false)
-                                                  .setProductListData(
-                                                      productRes);
-                                              Provider.of<ProductListData>(
-                                                      context,
-                                                      listen: false)
-                                                  .setData(
-                                                      List<
-                                                          Item>.from((productRes[
-                                                                  "items"]
-                                                              ?.map((x) =>
-                                                                  Item.fromMap(
-                                                                      x))) ??
-                                                          []),
-                                                      isSubCat: false);
-                                            }
-                                            // else {
-                                            //   // stopLoading();
-                                            //   Fluttertoast.showToast(
-                                            //     msg: "Server is not responding",
-                                            //     backgroundColor: Colors.grey[400],
-                                            //     toastLength: Toast.LENGTH_LONG,
-                                            //     gravity: ToastGravity.CENTER,
-                                            //     timeInSecForIosWeb: 2,
-                                            //   );
-                                            // }
-
-                                            Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                    builder: (_) => ProductList(
-                                                          linker: homeJsonUrl
-                                                                  .values
-                                                                  .toList()[
-                                                              homeIndex],
-                                                          isCat: "false",
-                                                          isLogin: isLogin,
-                                                        )));
-                                            // Navigator.of(context)
-                                            //     .push(MaterialPageRoute(
-                                            //         builder: (_) => ProductList(
-
-                                            //             )));
-                                            // Navigator.of(context)
-                                            //     .pushNamed("/ProductList");
-                                          },
-                                          title: homeJson.values
-                                              .toList()[homeIndex]
-                                              .keys
-                                              .toList()[0],
-                                        ),
-                                        CardsCarouselWidget(
-                                            productList: homeJson.values
-                                                .toList()[homeIndex]
-                                                .values
-                                                .toList()[0],
-                                            EComList: catList,
-                                            heroTag: homeJson.keys
-                                                .toList()[homeIndex]),
-                                        homeIndex == homeJson.length - 1
-                                            ? SizedBox(
-                                                height: 50,
-                                              )
-                                            : Container()
-                                      ]);
-                                    else {
-                                      return Container();
-                                    }
-                                  }),
-                            ]),
+                            ),
+                            CategoryList(
+                              isSub: false,
+                            ),
+                            Divider(
+                                thickness: 1.2,
+                                height: 1.2,
+                                color: Colors.grey[300]),
+                          ],
+                        ),
                       ),
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.white,
+                      elevation: 0,
                     ),
-                    floatingActionButtonLocation:
-                        FloatingActionButtonLocation.endFloat,
-                    floatingActionButton: PinCodeFab(),
                   ),
-                );
-              }));
+                  body: RefreshIndicator(
+                    onRefresh: () => getProductList(refresh: true),
+                    child: SingleChildScrollView(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: HomeSliderWidget(slides: recItem),
+                            ),
+                            Consumer<ProductListData>(
+                                builder: (context, productListData, ch) {
+                              return !(productListData?.stockStatus ?? true)
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      width: SizeConfig.w,
+                                      height: 30.0,
+                                      color:
+                                          // Colors.redAccent,
+
+                                          Colors.white,
+                                      child: Center(
+                                          child: AutoSizeText(
+                                        "We are not delivering in your area yet",
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            color:
+                                                // Colors.white),
+
+                                                Colors.redAccent),
+                                      )))
+                                  : Container();
+                            }),
+                            // All Groceries
+                            ListView.separated(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                separatorBuilder: (context, sepearatedIndecx) {
+                                  return Container(height: 10);
+                                },
+                                itemCount: homeJson.length,
+                                itemBuilder: (context, homeIndex) {
+                                  if (homeJson.values
+                                          .toList()[homeIndex]
+                                          .values
+                                          .toList()[0]
+                                          ?.isNotEmpty ??
+                                      true)
+                                    return Column(children: <Widget>[
+                                      HomeTitle(
+                                        viewAllPressed: () async {
+                                          // Provider.of<ProductListData>(context,
+                                          //         listen: false)
+                                          //     .setData(homeJson.values
+                                          //         .toList()[homeIndex]);
+                                          Map productRes = isLogin
+                                              ? await ApiServices
+                                                  .getRequestPincode(homeJsonUrl
+                                                          .values
+                                                          .toList()[homeIndex] +
+                                                      "?json=1")
+                                              : await ApiServices.getRequest(
+                                                  homeJsonUrl.values
+                                                          .toList()[homeIndex] +
+                                                      "?json=1");
+                                          if (productRes != null) {
+                                            // stopLoading();
+                                            // Provider.of<ProductListData>(contexss
+                                            print(
+                                                "befor view all the items are" +
+                                                    homeJsonUrl.values
+                                                        .toList()[homeIndex]);
+                                            print(
+                                                productRes["items"].toString());
+                                            Provider.of<ProductListData>(
+                                                    context,
+                                                    listen: false)
+                                                .setProductListData(productRes);
+                                            Provider.of<ProductListData>(
+                                                    context,
+                                                    listen: false)
+                                                .setData(
+                                                    List<Item>.from((productRes[
+                                                                "items"]
+                                                            ?.map((x) =>
+                                                                Item.fromMap(
+                                                                    x))) ??
+                                                        []),
+                                                    isSubCat: false);
+                                          }
+                                          // else {
+                                          //   // stopLoading();
+                                          //   Fluttertoast.showToast(
+                                          //     msg: "Server is not responding",
+                                          //     backgroundColor: Colors.grey[400],
+                                          //     toastLength: Toast.LENGTH_LONG,
+                                          //     gravity: ToastGravity.CENTER,
+                                          //     timeInSecForIosWeb: 2,
+                                          //   );
+                                          // }
+
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (_) => ProductList(
+                                                        linker: homeJsonUrl
+                                                                .values
+                                                                .toList()[
+                                                            homeIndex],
+                                                        isCat: "false",
+                                                        isLogin: isLogin,
+                                                      )));
+                                          // Navigator.of(context)
+                                          //     .push(MaterialPageRoute(
+                                          //         builder: (_) => ProductList(
+
+                                          //             )));
+                                          // Navigator.of(context)
+                                          //     .pushNamed("/ProductList");
+                                        },
+                                        title: homeJson.values
+                                            .toList()[homeIndex]
+                                            .keys
+                                            .toList()[0],
+                                      ),
+                                      CardsCarouselWidget(
+                                          productList: homeJson.values
+                                              .toList()[homeIndex]
+                                              .values
+                                              .toList()[0],
+                                          EComList: catList,
+                                          heroTag: homeJson.keys
+                                              .toList()[homeIndex]),
+                                      homeIndex == homeJson.length - 1
+                                          ? SizedBox(
+                                              height: 50,
+                                            )
+                                          : Container()
+                                    ]);
+                                  else {
+                                    return Container();
+                                  }
+                                }),
+                          ]),
+                    ),
+                  ),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.endFloat,
+                  floatingActionButton: PinCodeFab(),
+                ),
+              );
+            }),
+          );
   }
 }
