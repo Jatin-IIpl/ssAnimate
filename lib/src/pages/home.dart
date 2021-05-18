@@ -210,9 +210,8 @@ class _HomeWidgetState extends State<HomeWidget>
       }
     });
     controller = AnimationController(
-        duration: const Duration(milliseconds: 3000), vsync: this);
-    animation =
-        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+        duration: const Duration(milliseconds: 2200), vsync: this);
+    animation = CurvedAnimation(parent: controller, curve: Curves.easeInCirc);
 
     /*animation.addStatusListener((status) {
     if (status == AnimationStatus.completed) {

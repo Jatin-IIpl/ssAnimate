@@ -1,4 +1,5 @@
 import 'package:ECom/src/api/apiServices.dart';
+import 'package:ECom/src/elements/custom_route.dart';
 import 'package:ECom/src/helpers/SizeConfig.dart';
 import 'package:ECom/src/helpers/bottomNavBar.dart';
 import 'package:ECom/src/models/productListApi.dart';
@@ -36,6 +37,7 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   List<Item> productList = [];
   String catEndpoint;
   int pages, page;
@@ -253,35 +255,70 @@ class _ProductListState extends State<ProductList> {
                         : Container();
                   }),
                   Expanded(
-                    child: ListView.separated(
+                    child: AnimatedList(
+                      key: listKey,
                       physics: BouncingScrollPhysics(),
                       controller: controller,
                       padding: EdgeInsets.symmetric(vertical: 1),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       primary: false,
-                      itemCount: category?.items?.length ?? 0,
-                      separatorBuilder: (context, index) {
-                        return Divider(
-                            thickness: 1, height: 1.2, color: Colors.grey[300]);
-                      },
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: <Widget>[
-                            ProductItemWidget(
-                              stockStatus: category?.stockStatus ?? false,
-                              productData: category?.items[index],
-                              heroTag: 'details_featured_product',
-                              product: productImg
-                                  .elementAt(index % productImg.length),
+                      initialItemCount: category?.items?.length ?? 0,
+                      // separatorBuilder: (context, index) {
+                      //   return Divider(
+                      //       thickness: 1, height: 1.2, color: Colors.grey[300]);
+                      // },
+                      itemBuilder: (context, index, a) {
+                        print(category?.items?.length);
+                        if (index < (category?.items?.length ?? 0) - 1)
+                          return Column(
+                            children: [
+                              AnimateBuild(
+                                from: 1,
+                                child: Column(
+                                  children: <Widget>[
+                                    ProductItemWidget(
+                                      stockStatus:
+                                          category?.stockStatus ?? false,
+                                      productData: category?.items[index],
+                                      heroTag: 'details_featured_product',
+                                      product: productImg
+                                          .elementAt(index % productImg.length),
+                                    ),
+                                    index == category?.items?.length - 1
+                                        ? SizedBox(
+                                            height: 50,
+                                          )
+                                        : Container()
+                                  ],
+                                ),
+                              ),
+                              Divider(
+                                  thickness: 1,
+                                  height: 1.2,
+                                  color: Colors.grey[300])
+                            ],
+                          );
+                        else if (index == (category?.items?.length ?? 0) - 1)
+                          return AnimateBuild(
+                            from: 1,
+                            child: Column(
+                              children: <Widget>[
+                                ProductItemWidget(
+                                  stockStatus: category?.stockStatus ?? false,
+                                  productData: category?.items[index],
+                                  heroTag: 'details_featured_product',
+                                  product: productImg
+                                      .elementAt(index % productImg.length),
+                                ),
+                                index == category?.items?.length - 1
+                                    ? SizedBox(
+                                        height: 50,
+                                      )
+                                    : Container()
+                              ],
                             ),
-                            index == category?.items?.length - 1
-                                ? SizedBox(
-                                    height: 50,
-                                  )
-                                : Container()
-                          ],
-                        );
+                          );
                       },
                     ),
                   ),

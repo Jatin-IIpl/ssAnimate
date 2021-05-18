@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ECom/src/elements/custom_route.dart';
 import 'package:ECom/src/models/productListApi.dart';
 import 'package:ECom/src/pages/productDetails/product.dart';
 import 'package:ECom/src/pages/productListing/productListing.dart';
@@ -17,9 +18,8 @@ class CardsCarouselWidget extends StatefulWidget {
   List<String> EComList;
   String heroTag;
   List<Item> productList;
-  CardsCarouselWidget({Key key,
-  this.productList,
-   this.EComList, this.heroTag}) : super(key: key);
+  CardsCarouselWidget({Key key, this.productList, this.EComList, this.heroTag})
+      : super(key: key);
 
   @override
   _CardsCarouselWidgetState createState() => _CardsCarouselWidgetState();
@@ -35,25 +35,28 @@ class _CardsCarouselWidgetState extends State<CardsCarouselWidget> {
   Widget build(BuildContext context) {
     return widget.EComList.isEmpty
         ? CardsCarouselLoaderWidget()
-        :  Container(
-              color: Colors.white,
-              height: 173,
-              padding: const EdgeInsets.only(left: 3.0),
-              child: ListView.separated(
-                separatorBuilder: (BuildContext context, int index) {
-                  return Container(color: Colors.grey[300], width: 1);
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.productList.length,
-                itemBuilder: (context, index) {
-                  return CardWidget(
-                      product: widget.productList[index % widget.productList.length],
+        : Container(
+            color: Colors.white,
+            height: 173,
+            padding: const EdgeInsets.only(left: 3.0),
+            child: ListView.separated(
+              separatorBuilder: (BuildContext context, int index) {
+                return Container(color: Colors.grey[300], width: 1);
+              },
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.productList.length,
+              itemBuilder: (context, index) {
+                return AnimateBuild(
+                  from: 1,
+                  child: CardWidget(
+                      product:
+                          widget.productList[index % widget.productList.length],
                       market: widget.EComList[index % widget.EComList.length],
-                      heroTag: widget.heroTag +
-                          Random().nextInt(100).toString());
-                },
-              ),
-            );
-         
+                      heroTag:
+                          widget.heroTag + Random().nextInt(100).toString()),
+                );
+              },
+            ),
+          );
   }
 }

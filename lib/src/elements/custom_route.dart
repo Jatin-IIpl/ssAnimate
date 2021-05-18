@@ -127,6 +127,74 @@ class _AnimateBuildState extends State<AnimateBuild>
     );
   }
 }
+
+class AnimateBuildScale extends StatefulWidget {
+  Widget child;
+  int from;
+  AnimateBuildScale({Key key, this.from, this.child}) : super(key: key);
+
+  @override
+  _AnimateBuildScaleState createState() => _AnimateBuildScaleState();
+}
+
+class _AnimateBuildScaleState extends State<AnimateBuildScale>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 950), vsync: this);
+    animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+
+    /*animation.addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+      controller.reverse();
+    } else if (status == AnimationStatus.dismissed) {
+      controller.forward();
+    }
+  });*/
+//this will start the animation
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child:
+          // AnimatedBuilder(
+          //   animation: animation,
+          //   child: widget.child,
+          //   builder: (BuildContext context, Widget child) {
+          //     return
+          ScaleTransition(
+        //for slide transition uncomment this (sliding)
+        scale:
+            //  Tween<Offset>(
+            //   begin: widget.from == 0
+            //       ? Offset(0, 2)
+            //       : (widget.from == 1 ? Offset(1, 0) : Offset(-1, 0)),
+
+            //   // const Offset(0, 2),
+            //   end: Offset.zero,
+            // ).animate(
+            CurvedAnimation(
+          parent: animation,
+          curve: Curves.slowMiddle,
+        ),
+        // animation
+        // ),
+
+        child: widget.child,
+        // );
+        // },
+      ),
+    );
+  }
+}
 // class CustomPageTransitionBuilder extends PageTransitionsBuilder {
 //  @override
 //   Widget buildTransitions<T>(
