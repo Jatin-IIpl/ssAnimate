@@ -53,22 +53,28 @@ class CartData extends ChangeNotifier {
 
   CartData _currentCart;
   CartData get currentCart => _currentCart;
-  setCartData(Map json) {
+  setCartData(Map json, ) {
     // print("bbbbbbbbbbbbbbbbbbbbbbbb${json["products"].length>0?json["products"][0]["variant"]:0}");
     _currentCart = CartData.fromMap(json ?? {});
     notifyListeners();
   }
 
-  factory CartData.fromJson(String str) => CartData.fromMap(json.decode(str));
+  // factory CartData.fromJson(String str) => CartData.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory CartData.fromMap(Map<dynamic, dynamic> json) => CartData(
+  factory CartData.fromMap(
+          Map<dynamic, dynamic> json, ) =>
+      CartData(
         id: json["_id"] == null ? null : json["_id"],
         products: json["products"] == null
             ? []
-            : List<Product>.from(
-                json["products"].map((x) => Product.fromMap(x))),
+            : List<Product>.from(json["products"].map((x) {
+                // if (listkey != null)
+                //   listkey.insertItem(0,
+                //       duration: const Duration(milliseconds: 500));
+                return Product.fromMap(x);
+              })),
         dataId: json["id"] == null ? null : json["id"],
         datecreated: json["datecreated"] == null
             ? null
@@ -269,36 +275,35 @@ class EnumValues<T> {
 //
 //     final noRushData = noRushDataFromMap(jsonString);
 
-
-
 class Regular {
-    Regular({
-        this.daysOfSkip,
-        this.deliveryHours,
-        this.sundayDelivery,
-    });
+  Regular({
+    this.daysOfSkip,
+    this.deliveryHours,
+    this.sundayDelivery,
+  });
 
-    final String daysOfSkip;
-    final String deliveryHours;
-    final bool sundayDelivery;
+  final String daysOfSkip;
+  final String deliveryHours;
+  final bool sundayDelivery;
 
-    factory Regular.fromJson(String str) => Regular.fromMap(json.decode(str));
+  factory Regular.fromJson(String str) => Regular.fromMap(json.decode(str));
 
-    String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMap());
 
-    factory Regular.fromMap(Map<String, dynamic> json) => Regular(
+  factory Regular.fromMap(Map<String, dynamic> json) => Regular(
         daysOfSkip: json["days_of_skip"] == null ? null : json["days_of_skip"],
-        deliveryHours: json["delivery_hours"] == null ? null : json["delivery_hours"],
-        sundayDelivery: json["sunday_delivery"] == null ? null : json["sunday_delivery"],
-    );
+        deliveryHours:
+            json["delivery_hours"] == null ? null : json["delivery_hours"],
+        sundayDelivery:
+            json["sunday_delivery"] == null ? null : json["sunday_delivery"],
+      );
 
-    Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => {
         "days_of_skip": daysOfSkip == null ? null : daysOfSkip,
         "delivery_hours": deliveryHours == null ? null : deliveryHours,
         "sunday_delivery": sundayDelivery == null ? null : sundayDelivery,
-    };
+      };
 }
-
 
 class NoRushData {
   NoRushData({

@@ -37,7 +37,8 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
-  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  GlobalKey<AnimatedListState> listKey =
+      GlobalKey<AnimatedListState>(debugLabel: "sa");
   List<Item> productList = [];
   String catEndpoint;
   int pages, page;

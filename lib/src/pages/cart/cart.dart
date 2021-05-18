@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ECom/src/api/apiServices.dart';
 import 'package:ECom/src/elements/ShoppingCartButtonWidget.dart';
+import 'package:ECom/src/elements/custom_route.dart';
 import 'package:ECom/src/helpers/SizeConfig.dart';
 import 'package:ECom/src/helpers/autoText.dart';
 import 'package:ECom/src/helpers/constants.dart';
@@ -57,7 +58,8 @@ class _CartWidgetState extends State<CartWidget> {
   // _CartWidgetState() : super(CartController()) {
   //   _con = controller;
   // }
-  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  // final listKey = GlobalKey<AnimatedListState>();
+
   @override
   void initState() {
     super.initState();
@@ -90,6 +92,7 @@ class _CartWidgetState extends State<CartWidget> {
   bool _isCLoading = false;
   bool _isCart = false;
   // NoRushData noRushData;
+
   String minOrderAmount = "500";
   getCartData({bool refresh}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -111,8 +114,9 @@ class _CartWidgetState extends State<CartWidget> {
         // print(res["data"]["products"].isEmpty);
         // print(res["status"] == false);
         if (res["status"] && (res["data"]["products"]?.isNotEmpty ?? false)) {
-          Provider.of<CartData>(context, listen: false)
-              .setCartData(res["data"]);
+          Provider.of<CartData>(context, listen: false).setCartData(
+            res["data"],
+          );
           stopLoading();
           setState(() {
             _isCart = true;
@@ -156,6 +160,10 @@ class _CartWidgetState extends State<CartWidget> {
                       (cartdata?.currentCart?.products?.isEmpty ?? false))
                   ? CartNoItem()
                   : Consumer<UserData>(builder: (_, userData, ch) {
+                      // if (cartdata.currentCart.products.isNotEmpty)
+
+                      //   cartdata.currentCart.products.forEach((w) =>
+
                       bool noData =
                           userData?.currentUser?.addresses?.isEmpty ?? true;
 
@@ -390,25 +398,32 @@ class _CartWidgetState extends State<CartWidget> {
                                       color: Theme.of(context).dividerColor,
                                     ),
                                     ListView.builder(
+                                      // key: listKey,
                                       physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
-                                      addAutomaticKeepAlives: true,
+                                      // addAutomaticKeepAlives: true,
                                       itemCount: cartdata
                                               ?.currentCart?.products?.length ??
                                           0,
-                                      itemBuilder: (context, ind) {
+                                      itemBuilder: (
+                                        context,
+                                        ind,
+                                      ) {
                                         return
                                             // Expanded(
                                             //   child:
-                                            CartProductItem(
-                                          key: Key(
-                                              "${cartdata?.currentCart?.products[ind].variantId}"),
-                                          cartData: cartdata
-                                              ?.currentCart?.products[ind],
 
-                                          heroTag: 'details_featured_product',
-                                          product: productImg.elementAt(2),
-                                          // ),
+                                            AnimateBuildScale(
+                                          child: CartProductItem(
+                                            key: Key(
+                                                "${cartdata?.currentCart?.products[ind].variantId}"),
+                                            cartData: cartdata
+                                                ?.currentCart?.products[ind],
+
+                                            heroTag: 'details_featured_product',
+                                            product: productImg.elementAt(2),
+                                            // ),
+                                          ),
                                         );
                                       },
                                     ),

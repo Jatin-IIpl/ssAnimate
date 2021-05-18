@@ -1,4 +1,5 @@
 import 'package:ECom/src/api/apiServices.dart';
+import 'package:ECom/src/elements/custom_route.dart';
 import 'package:ECom/src/helpers/SizeConfig.dart';
 import 'package:ECom/src/helpers/constants.dart';
 import 'package:ECom/src/helpers/helper.dart';
@@ -115,29 +116,34 @@ class _LocalOrderState extends State<LocalOrder> {
                               return
                                   // Column(
                                   // children: [
-                                  Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: Icon(Icons.timer),
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) => OrderDetails(
-                                                        orderData:
-                                                            ActiveList[i],
-                                                      ))).then((value) {
-                                            ActiveList.clear();
-                                            PastList.clear();
-                                            OrderList.clear();
-                                            getOrderData();
-                                          }),
-                                      child:
-                                          orderContent(context, ActiveList[i])),
-                                ],
+                                  AnimateBuild(
+                                from: 1,
+                                key: ValueKey(ActiveList[i]),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: Icon(Icons.timer),
+                                    ),
+                                    GestureDetector(
+                                        onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        OrderDetails(
+                                                          orderData:
+                                                              ActiveList[i],
+                                                        ))).then((value) {
+                                              ActiveList.clear();
+                                              PastList.clear();
+                                              OrderList.clear();
+                                              getOrderData();
+                                            }),
+                                        child: orderContent(
+                                            context, ActiveList[i])),
+                                  ],
+                                ),
                               );
                               // Row(
                               //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -223,51 +229,55 @@ class _LocalOrderState extends State<LocalOrder> {
                                 },
                                 itemCount: PastList?.length ?? 0,
                                 itemBuilder: (context, i) {
-                                  return Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Icon(Icons.check_circle,
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                      ),
-                                      GestureDetector(
-                                          onTap: () => PastList[i]
-                                                      .status
-                                                      .toLowerCase() ==
-                                                  "refunded"
-                                              ? Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          OrderDetailsRefund(
-                                                            orderData:
-                                                                PastList[i],
-                                                          ))).then((value) {
-                                                  ActiveList.clear();
-                                                  PastList.clear();
-                                                  OrderList.clear();
-                                                  getOrderData();
-                                                })
-                                              : Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          OrderDetails(
-                                                            orderData:
-                                                                PastList[i],
-                                                          ))).then((value) {
-                                                  ActiveList.clear();
-                                                  PastList.clear();
-                                                  OrderList.clear();
-                                                  getOrderData();
-                                                }),
-                                          child: orderContent(
-                                              context, PastList[i])),
-                                    ],
+                                  return AnimateBuild(
+                                    from: 1,
+                                    key: ValueKey(ActiveList[i]),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10.0),
+                                          child: Icon(Icons.check_circle,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ),
+                                        GestureDetector(
+                                            onTap: () => PastList[i]
+                                                        .status
+                                                        .toLowerCase() ==
+                                                    "refunded"
+                                                ? Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            OrderDetailsRefund(
+                                                              orderData:
+                                                                  PastList[i],
+                                                            ))).then((value) {
+                                                    ActiveList.clear();
+                                                    PastList.clear();
+                                                    OrderList.clear();
+                                                    getOrderData();
+                                                  })
+                                                : Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            OrderDetails(
+                                                              orderData:
+                                                                  PastList[i],
+                                                            ))).then((value) {
+                                                    ActiveList.clear();
+                                                    PastList.clear();
+                                                    OrderList.clear();
+                                                    getOrderData();
+                                                  }),
+                                            child: orderContent(
+                                                context, PastList[i])),
+                                      ],
+                                    ),
                                   );
                                 })
                             : Center(
